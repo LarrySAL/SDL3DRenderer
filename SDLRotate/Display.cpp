@@ -10,6 +10,8 @@ Screen::Screen(int w, int h, int scale){
 	screenWidth = w/scale;
 	screenHeight = h/scale;
 
+	CameraCoord = { 0,0,0 };
+
 	//generate projection matrix
 	projMatrix = calculatePrjctMatrix(screenWidth, screenHeight, 0.1, 1000, 75);
 
@@ -114,18 +116,27 @@ void Screen::drawTriangle(triangProj t) {
 void Screen::meshToScreen(Mesh mesh) {
 
 	triangle t;
+	vec3 n;			//normal vector
+	vec3 pOT;		//point on Triangle
 	triangProj tP = { {}, {}, {} };
 	for (int i = 0; i < mesh.getMeshSize(); i++) {
+		n = mesh.getNormalOfTriangle(i);
 		t = mesh.getTriangle(i);
-		t[0] = (projMatrix * t[0]);
-		t[1] = (projMatrix * t[1]);
-		t[2] = (projMatrix * t[2]);
+		pOT = t[0];
+		
+		double  check = n * (pOT-CameraCoord).unit();
 
-		for (int j = 0; j < 3; j++) {
-			tP[j].x = (int)(t[j].x * screenWidth)+screenWidth/2;
-			tP[j].y = (int)(t[j].y * -screenHeight)+screenHeight/2;
+		if(check < 0) {
+			t[0] = (projMatrix * t[0]);
+			t[1] = (projMatrix * t[1]);
+			t[2] = (projMatrix * t[2]);
+
+			for (int j = 0; j < 3; j++) {
+				tP[j].x = (int)(t[j].x * screenWidth) + screenWidth / 2;
+				tP[j].y = (int)(t[j].y * -screenHeight) + screenHeight / 2;
+			}
+			drawTriangle(tP);
 		}
-		drawTriangle(tP);
 
 	}
 

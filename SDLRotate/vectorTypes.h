@@ -18,6 +18,17 @@ typedef struct vec3{
 		return std::sqrt(x * x + y * y + z * z);
 	}
 
+	vec3 unit() {
+		vec3 result;
+		double len = length();
+
+		result.x = x / len;
+		result.y = y / len;
+		result.z = z / len;
+
+		return result;
+	}
+
 	vec3 operator+(const vec3& other) const {
 		vec3 result;
 		result.x = x + other.x;
@@ -54,6 +65,14 @@ typedef struct vec3{
 		result.y = z * other.x - x * other.z;
 		result.z = x * other.y - y * other.x;
 		return result;
+	}
+
+	void operator+= (const vec3& other) {
+		
+		this->x += this->x + other.x;
+		this->y += this->y + other.y;
+		this->z += this->z + other.z;
+		
 	}
 
 } vec3;

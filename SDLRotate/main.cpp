@@ -9,7 +9,7 @@ using namespace std;
 
 int main(int argc, char* args[]) {
 
-	Screen screen(960, 960, 1);
+	Screen screen(640, 640, 1);
 
 	screen.clear();
 	
@@ -23,30 +23,28 @@ int main(int argc, char* args[]) {
 
 	triangleV cubeFacet = {
 		//South
-		{{0,0,0}, {0,0,sl}, {sl,0,sl}},
-		{{0,0,0}, {sl,0,sl}, {sl,0,0}},
+		{{sl,0,0}, {sl,sl,0}, {0,sl,0}},
+		{{sl,0,0}, {0,sl,0}, {0,0,0}},
 		//East
 		{{sl,0,0}, {sl,0,sl}, {sl,sl,sl}},
 		{{sl,0,0}, {sl,sl,sl}, {sl,sl,0}},
 		//Nort
-		{{sl,sl,0}, {sl,sl,sl}, {0,sl,sl}},
-		{{sl,sl,0}, {0,sl,sl}, {0,sl,0}},
+		{{0,0,sl}, {0,sl,sl}, {sl,sl,sl}},
+		{{0,0,sl}, {sl,sl,sl}, {sl,0,sl}},
 		//West
 		{{0,sl,0}, {0,sl,sl}, {0,0,sl}},
 		{{0,sl,0}, {0,0,sl}, {0,0,0}},
 		//Top
-		{{0,0,sl}, {0,sl,sl}, {sl,sl,sl}},
-		{{0,0,sl}, {sl,sl,sl}, {sl,0,sl}},
+		{{sl,sl,0}, {sl,sl,sl}, {0,sl,sl}},
+		{{sl,sl,0}, {0,sl,sl}, {0,sl,0}},
 		//Bottom
-		{{sl,0,0}, {sl,sl,0}, {0,sl,0}},
-		{{sl,0,0}, {0,sl,0}, {0,0,0}}
+		{{0,0,0}, {0,0,sl}, {sl,0,sl}},
+		{{0,0,0}, {sl,0,sl}, {sl,0,0}}
 	};
 
 	Mesh cube(cubeFacet, {sl/2,sl/2,sl/2});
 
-	cube.moveMesh({ -sl/2,-sl/2-5,30 });
-
-	screen.projMatrix.printMatrix();
+	cube.moveMesh({ -sl/2,-sl/2+5,30 });
 
 	frameHandler.restartTime();
 
@@ -62,15 +60,17 @@ int main(int argc, char* args[]) {
 			screen.line(0, h / 2, w, h / 2);
 			
 			screen.meshToScreen(cube);
+			
+			cube.rotateMesh({ 0, 0, M_PI / 300 }, {0,0,0});
 
-			double frequency = 0.25/10;
-			double diameter = 5;
-			double phase = -90.0 * RADCONV;
-			cube.setMesh({ 
-				diameter * std::cos(timer * RADCONV * frequency + phase), 
-				diameter * std::sin(timer * RADCONV * frequency + phase),
-				10 * std::cos(timer * RADCONV * 0.5)+ 30
-			});
+			//double frequency = 0.25/10;
+			//double diameter = 5;
+			//double phase = -90.0 * RADCONV;
+			//cube.setMesh({ 
+			//	diameter * std::cos(timer * RADCONV * frequency + phase), 
+			//	diameter * std::sin(timer * RADCONV * frequency + phase),
+			//	30/*10 * std::cos(timer * RADCONV * 0.5)+ 30*/
+			//});
 
 		}
 

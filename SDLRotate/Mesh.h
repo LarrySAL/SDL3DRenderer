@@ -9,8 +9,6 @@ private:
 	triangleV triangles;
 	vec3 centerPoint;
 	std::vector<vec3> normalVectors;
-
-	vec3 getUnitVector(vec3 vec);
 	
 	void calculateNormals();
 
@@ -30,6 +28,8 @@ public:
 	void removeTriangle(int index);
 
 	vec3 getNormalOfTriangle(int index);
+
+	vec3 getCenter();
 
 	void moveMesh(vec3 moveVector);
 

@@ -12,17 +12,6 @@ Mesh::Mesh(triangleV inputFacets, vec3 center) {
 
 }
 
-vec3 Mesh::getUnitVector(vec3 vec) {
-	vec3 result;
-	double length = vec.length();
-
-	result.x = vec.x / length;
-	result.y = vec.y / length;
-	result.z = vec.z / length;
-	
-	return result;
-}
-
 void Mesh::calculateNormals() {
 	//make normal vectors that face away from the centerPoint
 	int i = 0;
@@ -31,7 +20,7 @@ void Mesh::calculateNormals() {
 		vec3 v1 = f[1] - f[0];
 		vec3 v2 = f[2] - f[0];
 		//initial normal vector
-		vec3 N = getUnitVector(v2 / v1);
+		vec3 N = (v2 / v1).unit();
 		//vector from center to point on facet
 		vec3 V = f[0] - centerPoint;
 
@@ -40,6 +29,7 @@ void Mesh::calculateNormals() {
 			N = -N;
 		}
 		normalVectors[i] = N;
+		i++;
 	}
 }
 
@@ -57,7 +47,7 @@ Matrix3x3 Mesh::calculateRotYMatrix(double alphaRad){
 	double values[3][3] = {
 		{std::cos(alphaRad), 0, std::sin(alphaRad)},
 		{0, 1, 0},
-		{-std::sin(alphaRad), 1, std::cos(alphaRad)},
+		{-std::sin(alphaRad), 0, std::cos(alphaRad)},
 	};
 
 	return Matrix3x3(values);
@@ -94,6 +84,11 @@ vec3 Mesh::getNormalOfTriangle(int index) {
 	return normalVectors[index];
 }
 
+vec3 Mesh::getCenter()
+{
+	return centerPoint;
+}
+
 void Mesh::moveMesh(vec3 moveVector) {
 	for (int i = 0; i < triangles.size(); i++) {
 		for (int j = 0; j < triangles[i].size(); j++) {
@@ -109,5 +104,16 @@ void Mesh::setMesh(vec3 newCenterPos) {
 }
 
 void Mesh::rotateMesh(vec3 angleVec, vec3 rotCent) {
-
+	vec3 centerToVertex;
+	for (int i = 0; i < triangles.size(); i++) {
+		for (int j = 0; j < 3; j++) {
+			centerToVertex = triangles[i][j] - rotCent;
+			triangles[i][j] = rotCent + calculateRotXMatrix(angleVec.x) * centerToVertex;
+			centerToVertex = triangles[i][j] - rotCent;
+			triangles[i][j] = rotCent + calculateRotYMatrix(angleVec.y) * centerToVertex;
+			centerToVertex = triangles[i][j] - rotCent;
+			triangles[i][j] = rotCent + calculateRotZMatrix(angleVec.z) * centerToVertex;
+		}
+	}
+	calculateNormals();
 }

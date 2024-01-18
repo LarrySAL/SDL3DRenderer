@@ -15,6 +15,7 @@ private:
 	int screenWidth;
 	int screenHeight;
 
+	vec3 CameraCoord;
 
 	Matrix4x4 calculatePrjctMatrix(int screenW, int screenH, double zNear, double zFar, double fov);
 
