@@ -1,4 +1,12 @@
 #include <iostream>
+#include <cstdlib> // For system function
+
+#ifdef _WIN32
+const char* CLEAR_COMMAND = "cls";
+#else
+const char* CLEAR_COMMAND = "clear";
+#endif
+
 #include "Display.h"
 #include "FrameHandler.h"
 #include "Mesh.h"
@@ -9,7 +17,7 @@ using namespace std;
 
 int main(int argc, char* args[]) {
 
-	Screen screen(640, 640, 1);
+	Screen screen(960, 960, 1);
 
 	screen.clear();
 	
@@ -22,22 +30,22 @@ int main(int argc, char* args[]) {
 	double sl = 3;
 
 	triangleV cubeFacet = {
-		//South
+		//South Red
 		{{sl,0,0}, {sl,sl,0}, {0,sl,0}},
 		{{sl,0,0}, {0,sl,0}, {0,0,0}},
-		//East
+		//East Pink
 		{{sl,0,0}, {sl,0,sl}, {sl,sl,sl}},
 		{{sl,0,0}, {sl,sl,sl}, {sl,sl,0}},
-		//Nort
+		//Nort Skin color
 		{{0,0,sl}, {0,sl,sl}, {sl,sl,sl}},
 		{{0,0,sl}, {sl,sl,sl}, {sl,0,sl}},
-		//West
+		//West Yellow
 		{{0,sl,0}, {0,sl,sl}, {0,0,sl}},
 		{{0,sl,0}, {0,0,sl}, {0,0,0}},
-		//Top
+		//Top Light Blue
 		{{sl,sl,0}, {sl,sl,sl}, {0,sl,sl}},
 		{{sl,sl,0}, {0,sl,sl}, {0,sl,0}},
-		//Bottom
+		//Bottom Green
 		{{0,0,0}, {0,0,sl}, {sl,0,sl}},
 		{{0,0,0}, {sl,0,sl}, {sl,0,0}}
 	};
@@ -53,6 +61,8 @@ int main(int argc, char* args[]) {
 		if (frameHandler.drawNewFrame()) {
 			screen.show();
 			screen.clear();
+			system(CLEAR_COMMAND);
+
 			unsigned int fcount = frameHandler.getFrameCount();
 			Uint64 timer = frameHandler.timeSinceStart();
 
@@ -61,7 +71,11 @@ int main(int argc, char* args[]) {
 			
 			screen.meshToScreen(cube);
 			
-			cube.rotateMesh({ 0, 0, M_PI / 300 }, {0,0,0});
+			//cube.printNormals();
+			
+			cube.rotateMesh({ 0, 0, M_PI / 100 }, {0,0,0});
+			cube.rotateMesh({ -M_PI / 100, M_PI / 50, 0 }, cube.getCenter());
+
 
 			//double frequency = 0.25/10;
 			//double diameter = 5;

@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 #include <cmath>
+#include <iostream>
 #include "Matrix4x4.h"
 #include "Mesh.h"
 
@@ -34,13 +35,14 @@ public:
 
 	int getScreenHeight();
 
-	void pixel(int x, int y);
+	void pixel(int x, int y, SDL_Color color = {0xff,0xff,0xff,0xff});
 
-	void line(int x1, int y1, int x2, int y2);
 
-	void dotedLine(int x1, int y1, int x2, int y2, int spaceSize);
+	void line(int x1, int y1, int x2, int y2, SDL_Color color = { 0xff,0xff,0xff,0xff });
 
-	void drawTriangle(triangProj t);
+	void dotedLine(int x1, int y1, int x2, int y2, int spaceSize, SDL_Color color = { 0xff,0xff,0xff,0xff });
+
+	void drawTriangle(triangProj t, SDL_Color color = { 0xff,0xff,0xff,0xff });
 
 	void meshToScreen(Mesh mesh);
 

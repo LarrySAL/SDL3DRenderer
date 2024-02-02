@@ -84,6 +84,12 @@ vec3 Mesh::getNormalOfTriangle(int index) {
 	return normalVectors[index];
 }
 
+void Mesh::printNormals(){
+	for(vec3 n : normalVectors){
+		std::cout << n.x << " " << n.y << " " << n.z << std::endl;
+	}
+}
+
 vec3 Mesh::getCenter()
 {
 	return centerPoint;
@@ -105,6 +111,7 @@ void Mesh::setMesh(vec3 newCenterPos) {
 
 void Mesh::rotateMesh(vec3 angleVec, vec3 rotCent) {
 	vec3 centerToVertex;
+	//create vector from rotation center to the vertex that is to be moved, rotate vector, save vector + rotation center origin vector as our new vertex position
 	for (int i = 0; i < triangles.size(); i++) {
 		for (int j = 0; j < 3; j++) {
 			centerToVertex = triangles[i][j] - rotCent;
@@ -115,5 +122,12 @@ void Mesh::rotateMesh(vec3 angleVec, vec3 rotCent) {
 			triangles[i][j] = rotCent + calculateRotZMatrix(angleVec.z) * centerToVertex;
 		}
 	}
+	//rotation to centerpoint
+	centerToVertex = centerPoint - rotCent;
+	centerPoint = rotCent + calculateRotXMatrix(angleVec.x) * centerToVertex;
+	centerToVertex = centerPoint - rotCent;
+	centerPoint = rotCent + calculateRotYMatrix(angleVec.y) * centerToVertex;
+	centerToVertex = centerPoint - rotCent;
+	centerPoint = rotCent + calculateRotZMatrix(angleVec.z) * centerToVertex;
 	calculateNormals();
 }
