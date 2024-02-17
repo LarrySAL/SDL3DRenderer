@@ -35,16 +35,21 @@ public:
 
 	int getScreenHeight();
 
-	void pixel(int x, int y, SDL_Color color = {0xff,0xff,0xff,0xff});
+	void pixel(double x, double y, SDL_Color color = { 0xff,0xff,0xff,0xff });
 
+	void pixel(int x, int y, SDL_Color color = { 0xff,0xff,0xff,0xff });
 
-	void line(int x1, int y1, int x2, int y2, SDL_Color color = { 0xff,0xff,0xff,0xff });
+	void line(double x1, double y1, double x2, double y2, SDL_Color color = { 0xff,0xff,0xff,0xff });
 
-	void dotedLine(int x1, int y1, int x2, int y2, int spaceSize, SDL_Color color = { 0xff,0xff,0xff,0xff });
+	void dotedLine(double x1, double y1, double x2, double y2, int spaceSize, SDL_Color color = { 0xff,0xff,0xff,0xff });
 
 	void drawTriangle(triangProj t, SDL_Color color = { 0xff,0xff,0xff,0xff });
 
+	void drawTriangleF(triangProj t, SDL_Color color = { 0xff,0xff,0xff,0xff });
+
 	void meshToScreen(Mesh mesh);
+
+	void surfaceToScreen(Mesh mesh);
 
 };
 

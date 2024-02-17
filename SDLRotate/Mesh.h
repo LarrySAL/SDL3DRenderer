@@ -29,7 +29,7 @@ public:
 
 	vec3 getNormalOfTriangle(int index);
 
-	void printNormals();
+	//void printNormals();
 
 	vec3 getCenter();
 

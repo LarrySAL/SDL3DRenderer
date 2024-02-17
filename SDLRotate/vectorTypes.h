@@ -79,17 +79,27 @@ typedef struct vec3{
 
 //3D Vector for 2D screen coordinates
 typedef struct vec2{
-	int x = 0, y = 0;
+	double x = 0, y = 0;
 
 	vec2() : x(0), y(0){}
 
-	vec2(int ix, int iy){
+	vec2(double ix, double iy){
 		x = ix;
 		y = iy;
 	}
 
 	double length() {
 		return std::sqrt(x * x + y * y);
+	}
+
+	vec2 unit() {
+		vec2 result;
+		double len = length();
+
+		result.x = x / len;
+		result.y = y / len;
+
+		return result;
 	}
 
 	vec2 operator+(const vec2& other) const {
@@ -119,6 +129,11 @@ typedef struct vec2{
 		return x * other.x + y * other.y;
 	}
 
+	//infamous 2d cross product
+	double operator/ (const vec2& other) const {
+		return x * other.y - y * other.x;
+	}
+
 }vec2;
 
 //should have 3 vertecis inside
@@ -131,4 +146,10 @@ typedef std::vector<triangle> triangleV;
 typedef std::vector<triangProj> triangleProjV;
 
 
+double maxX2(std::vector<double> xes);
 
+double maxY2(std::vector<double> yes);
+
+double minX2(std::vector<double> xes);
+
+double minY2(std::vector<double> yes);

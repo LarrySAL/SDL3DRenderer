@@ -17,7 +17,7 @@ using namespace std;
 
 int main(int argc, char* args[]) {
 
-	Screen screen(960, 960, 1);
+	Screen screen(640, 640, 1);
 
 	screen.clear();
 	
@@ -29,25 +29,26 @@ int main(int argc, char* args[]) {
 
 	double sl = 3;
 
+	//clockwise
 	triangleV cubeFacet = {
 		//South Red
-		{{sl,0,0}, {sl,sl,0}, {0,sl,0}},
-		{{sl,0,0}, {0,sl,0}, {0,0,0}},
+		{{0,0,0}, {0,sl,0}, {sl,sl,0}},
+		{{0,0,0}, {sl,sl,0}, {sl,0,0}},
 		//East Pink
-		{{sl,0,0}, {sl,0,sl}, {sl,sl,sl}},
-		{{sl,0,0}, {sl,sl,sl}, {sl,sl,0}},
-		//Nort Skin color
-		{{0,0,sl}, {0,sl,sl}, {sl,sl,sl}},
-		{{0,0,sl}, {sl,sl,sl}, {sl,0,sl}},
+		{{sl,0,0}, {sl,sl,0}, {sl,sl,sl}},
+		{{sl,0,0}, {sl,sl,sl}, {sl,0,sl}},
+		//North Skin color
+		{{sl,0,sl}, {sl,sl,sl}, {0,sl,sl}},
+		{{sl,0,sl}, {0,sl,sl}, {0,0,sl}},
 		//West Yellow
-		{{0,sl,0}, {0,sl,sl}, {0,0,sl}},
-		{{0,sl,0}, {0,0,sl}, {0,0,0}},
+		{{0,0,sl}, {0,sl,sl}, {0,sl,0}},
+		{{0,0,sl}, {0,sl,0}, {0,0,0}},
 		//Top Light Blue
-		{{sl,sl,0}, {sl,sl,sl}, {0,sl,sl}},
-		{{sl,sl,0}, {0,sl,sl}, {0,sl,0}},
+		{{0,sl,0}, {0,sl,sl}, {sl,sl,sl}},
+		{{0,sl,0}, {sl,sl,sl}, {sl,sl,0}},
 		//Bottom Green
-		{{0,0,0}, {0,0,sl}, {sl,0,sl}},
-		{{0,0,0}, {sl,0,sl}, {sl,0,0}}
+		{{0,0,sl}, {0,0,0}, {sl,0,0}},
+		{{0,0,sl}, {sl,0,0}, {sl,0,sl}}
 	};
 
 	Mesh cube(cubeFacet, {sl/2,sl/2,sl/2});
@@ -69,12 +70,12 @@ int main(int argc, char* args[]) {
 			screen.line(w / 2, 0, w / 2, h);
 			screen.line(0, h / 2, w, h / 2);
 			
-			screen.meshToScreen(cube);
+			screen.surfaceToScreen(cube);
 			
 			//cube.printNormals();
 			
 			cube.rotateMesh({ 0, 0, M_PI / 100 }, {0,0,0});
-			cube.rotateMesh({ -M_PI / 100, M_PI / 50, 0 }, cube.getCenter());
+			cube.rotateMesh({ 0, M_PI / 50, 0 }, cube.getCenter());
 
 
 			//double frequency = 0.25/10;

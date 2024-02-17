@@ -84,11 +84,11 @@ vec3 Mesh::getNormalOfTriangle(int index) {
 	return normalVectors[index];
 }
 
-void Mesh::printNormals(){
-	for(vec3 n : normalVectors){
-		std::cout << n.x << " " << n.y << " " << n.z << std::endl;
-	}
-}
+//void Mesh::printNormals(){
+//	for(const vec3 n : normalVectors){
+//		std::cout << n.x << " " << n.y << " " << n.z << std::endl;
+//	}
+//}
 
 vec3 Mesh::getCenter()
 {
