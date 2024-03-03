@@ -12,6 +12,11 @@ Screen::Screen(int w, int h, int scale){
 
 	CameraCoord = { 0,0,0 };
 
+	lightDir = { 0,0,1 };
+	lightDir = lightDir.unit();
+
+	stop = false;
+
 	//generate projection matrix
 	projMatrix = calculatePrjctMatrix(screenWidth, screenHeight, 0.1, 1000, 75);
 
@@ -29,11 +34,27 @@ void Screen::show(){
 
 void Screen::input(){
 	while (SDL_PollEvent(&event)) {
+
+		switch (event.type) {
+		
+		case SDL_QUIT:
+			SDL_Quit();
+			exit(0);
+		case SDL_KEYDOWN:
+			stop = !stop;
+		default:
+			break;
+		}
+
 		if (event.type == SDL_QUIT) {
 			SDL_Quit();
 			exit(0);
 		}
 	}
+}
+
+bool Screen::stopLoop() {
+	return stop;
 }
 
 int Screen::getScreenWidth() {
@@ -126,32 +147,43 @@ void Screen::drawTriangleF(triangProj t, SDL_Color color){
 
 	std::vector<double> xes = { t[0].x, t[1].x, t[2].x};
 	std::vector<double> yes = { t[0].y, t[1].y, t[2].y };
-
+	
+	//calculate bounding box for triangle
 	int maxW = int(maxX2(xes));
 	int maxH = int(maxY2(yes));
 	int minW = int(minX2(xes));
 	int minH = int(minY2(yes));
 
-	for (int i = minW; i <= maxW; i++) {
-		for (int j = minH; j <= maxH; j++) {
-			vec2 pq = { double(i),double(j) };
+	//line(minW, maxH, maxW, maxH);
+	//line(minW, maxH, minW, minH);
+	//line(minW, minH, maxW, minH);
+	//line(maxW, minH, maxW, maxH);
 
-			pq = pq.unit();
-			double a = v1.unit() / pq;
-			double b = v2.unit() / pq;
-			double c = v3.unit() / pq;
+	//iterate through every pixel in bounding box
+	for (int i = minH; i <= maxH; i++) {
+		for (int j = minW; j <= maxW; j++) {
+			
+			vec2 pq = { double(j),double(i)};
+
+			vec2 pq1 = pq - t[0];
+			double a = v1.unit() / pq1.unit();
+			pq1 = pq - t[1];
+			double b = v2.unit() / pq1.unit();
+			pq1 = pq - t[2];
+			double c = v3.unit() / pq1.unit();
+
+			//check if current pixel is inside triangle
 			bool cond = (
-				v1.unit() / pq < 0 &&
-				v2.unit() / pq < 0 &&
-				v3.unit() / pq < 0
+				a >= 0 &&
+				b >= 0 &&
+				c >= 0
 				);
-			//std::cout << cond << std::endl;
+
 			if (cond) {
 				//double x = (i * screenWidth) + screenWidth / 2;
 				//double y = (j * -screenHeight) + screenHeight / 2;
-				double x = i;
-				double y = j;
-				pixel(x,y, color);
+				
+				pixel(j,i, color);
 			}
 		}
 	}
@@ -196,6 +228,8 @@ void Screen::meshToScreen(Mesh mesh) {
 				};
 			}
 
+			currentColor = { 0xff, 0xff, 0xff, 0xff };
+
 			drawTriangle(tP, currentColor);
 
 		}
@@ -227,6 +261,8 @@ void Screen::surfaceToScreen(Mesh mesh) {
 
 	SDL_Color currentColor = { 0,0,0,0 };
 
+	double alpha;		//brigthness factor 0-1
+
 	for (int i = 0; i < mesh.getMeshSize(); i++) {
 		n = mesh.getNormalOfTriangle(i);
 		t = mesh.getTriangle(i);
@@ -234,8 +270,11 @@ void Screen::surfaceToScreen(Mesh mesh) {
 		cTP = (pOT - CameraCoord).unit();
 
 		double  check = n * cTP;
+		alpha = 0.1;
+
 
 		if (check < 0) {
+			//projection and transformation to screen coords
 			t[0] = (projMatrix * t[0]);
 			t[1] = (projMatrix * t[1]);
 			t[2] = (projMatrix * t[2]);
@@ -246,11 +285,28 @@ void Screen::surfaceToScreen(Mesh mesh) {
 			}
 
 			if (i % 2 == 0) {
-				currentColor = {
-					{Uint8(-mult * i + 255)},
-					{Uint8(mult * i)},
-					{Uint8(mult * i - i * 255 / 4)}
-				};
+				//brightness calculation
+				//alpha depending on the angle (45 degrees -> alpha = 0.5)
+
+				//float angleT = std::acos(lightDir * n) * 180/M_PI;
+
+				if (lightDir * n < -0.1) {
+					alpha = std::acos(lightDir * n)/(90 * M_PI/180);
+
+					if (alpha < 0.1) {
+						alpha = 0.1; 
+					}
+
+				}
+				
+				currentColor = { Uint8(255 * alpha), Uint8(0 * alpha), Uint8(0 * alpha) };
+				//currentColor = { 255,255,255 };
+
+				//currentColor = {
+				//	{Uint8(-mult * i + 255)},
+				//	{Uint8(mult * i)},
+				//	{Uint8(mult * i - i * 255 / 4)}
+				//};
 			}
 
 			drawTriangleF(tP, currentColor);

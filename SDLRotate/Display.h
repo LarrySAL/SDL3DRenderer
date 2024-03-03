@@ -18,7 +18,11 @@ private:
 
 	vec3 CameraCoord;
 
+	vec3 lightDir;
+
 	Matrix4x4 calculatePrjctMatrix(int screenW, int screenH, double zNear, double zFar, double fov);
+
+	bool stop;
 
 public:
 	Matrix4x4 projMatrix;
@@ -30,6 +34,8 @@ public:
 	void show();
 
 	void input();
+
+	bool stopLoop();
 
 	int getScreenWidth();
 

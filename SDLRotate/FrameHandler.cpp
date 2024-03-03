@@ -4,6 +4,7 @@ FrameHandler::FrameHandler(int frameRate) :
 	startTime(SDL_GetTicks64()), 
 	frameCount(0), 
 	lastFrame(0) {
+
 	frameLength = static_cast<Uint64>((1 / static_cast<double>(frameRate)) * 1000);
 }
 

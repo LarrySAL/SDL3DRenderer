@@ -22,7 +22,7 @@ double maxY2(std::vector<double> yes) {
 }
 
 double minX2(std::vector<double> xes) {
-	double min = 0;
+	double min = xes[0];
 	for (double x : xes) {
 		if (min > x) {
 			min = x;
@@ -32,7 +32,7 @@ double minX2(std::vector<double> xes) {
 }
 
 double minY2(std::vector<double> yes) {
-	double min = 0;
+	double min = yes[0];
 	for (double y : yes) {
 		if (min > y) {
 			min = y;

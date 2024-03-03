@@ -21,7 +21,7 @@ int main(int argc, char* args[]) {
 
 	screen.clear();
 	
-	FrameHandler frameHandler(100);
+	FrameHandler frameHandler(60);
 	
 
 	int w = screen.getScreenWidth();
@@ -57,6 +57,8 @@ int main(int argc, char* args[]) {
 
 	frameHandler.restartTime();
 
+	//Uint64 timeSince
+
 	while (true) {
 		
 		if (frameHandler.drawNewFrame()) {
@@ -67,15 +69,20 @@ int main(int argc, char* args[]) {
 			unsigned int fcount = frameHandler.getFrameCount();
 			Uint64 timer = frameHandler.timeSinceStart();
 
+
 			screen.line(w / 2, 0, w / 2, h);
 			screen.line(0, h / 2, w, h / 2);
 			
 			screen.surfaceToScreen(cube);
-			
+			//screen.meshToScreen(cube);
 			//cube.printNormals();
 			
-			cube.rotateMesh({ 0, 0, M_PI / 100 }, {0,0,0});
-			cube.rotateMesh({ 0, M_PI / 50, 0 }, cube.getCenter());
+
+			double frameTime = (timer/ fcount);
+			double rot1 = (0.25 / 10) * RADCONV * frameTime; //frequency to radians
+			double rot2 = (0.5 / 10) * RADCONV * frameTime;
+			cube.rotateMesh({ 0, 0, rot1 }, {0,0,0});
+			cube.rotateMesh({ 0, rot2, rot2 }, cube.getCenter());
 
 
 			//double frequency = 0.25/10;
@@ -96,6 +103,9 @@ int main(int argc, char* args[]) {
 
 		//check if user clicks Exit
 		screen.input();
+
+		while (screen.stopLoop()) screen.input();;
+
 	}
 
 	return 0;

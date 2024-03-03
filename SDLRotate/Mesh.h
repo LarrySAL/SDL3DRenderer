@@ -19,6 +19,8 @@ private:
 public:
 	Mesh(triangleV inputFacets, vec3 center);
 
+	Mesh(triangleV inputFacets, std::vector<vec3> normals);
+
 	triangle getTriangle(int index);
 
 	int getMeshSize();

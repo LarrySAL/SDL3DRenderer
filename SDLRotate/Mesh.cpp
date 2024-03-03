@@ -12,6 +12,14 @@ Mesh::Mesh(triangleV inputFacets, vec3 center) {
 
 }
 
+Mesh::Mesh(triangleV inputFacets, std::vector<vec3> normals) {
+	triangles.resize(inputFacets.size());
+	triangles = inputFacets;
+
+	normalVectors = normals;
+
+}
+
 void Mesh::calculateNormals() {
 	//make normal vectors that face away from the centerPoint
 	int i = 0;

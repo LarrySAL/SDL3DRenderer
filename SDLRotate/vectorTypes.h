@@ -93,6 +93,9 @@ typedef struct vec2{
 	}
 
 	vec2 unit() {
+		
+		if (x == 0 && y == 0) return {0,0};
+		
 		vec2 result;
 		double len = length();
 
